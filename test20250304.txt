@@ -36,5 +36,3 @@
 15. 학생 중 이름의 끝자가 '훈'인 학생의 학번, 이름, 전공1코드 조회하기.  학년 순으로 정렬하기
 
 16. 교수 중 교수의 성이 ㅈ이 포함된 교수의 이름을 출력하기
-SELECT NAME FROM professor
-WHERE NAME BETWEEN "자%" AND "찧%"
