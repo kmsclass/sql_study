@@ -236,3 +236,89 @@ WHERE profno IS NULL
 SELECT studno,NAME,major1,profno
 FROM student
 WHERE profno IS NOT  NULL
+
+-- 교수의 교수번호(no),교수이름(name), 현재급여(salary),상여금(bonus), 
+-- 통상급여(salary+bonus) 조회하기
+SELECT NO 교수번호 ,NAME 교수이름 ,salary 현재급여 ,bonus 보너스, 
+   salary+bonus 통상급여  FROM professor
+/* null은 비교,연산의 대상이 아님
+   null값과의 연산의 결과는 null임.   */
+-- 교수 중 보너스가 있는 교수의 이름,급여,보너스, 연봉을 조회하기
+-- 연봉 : 급여 * 12 +보너스
+SELECT NAME,salary,bonus, salary*12+bonus 연봉
+FROM professor
+WHERE bonus IS NOT NULL
+-- 교수 중 보너스가 없는 교수의 이름,급여, 연봉을 조회하기
+-- 연봉 : 급여 * 12
+SELECT NAME,salary,bonus, salary*12 연봉
+FROM professor
+WHERE bonus IS NULL
+/*
+   select *(모든컬럼) || 컬럼명1,컬럼명,..  --- 3
+   from 테이블명                            --- 1
+   [where 조건문]                           --- 2
+         where 조건문이 생략 되면 모든 레코드를 선택
+         where 조건문의 결과가 참인 레코드만 선택        
+   [order by 컬럼명|조회된컬럼순서|별명 [asc|desc]]  --- 4    
+                                             select 문장의 마지막에 작성
+   order by : 정렬관련 구문
+	  오름차순정렬 : 작은값부터 큰값으로 asc 예약어. 기본값. 생략가능
+	  내림차순정렬 : 큰값에서 작은값으로 desc 예약어. 생략불가 
+*/
+-- 1학년 학생의 이름,키를 조회하기. 키가 큰순으로 출력하기
+-- (1)컬럼명으로 정렬하기
+SELECT NAME,height FROM student 
+WHERE grade = 1 
+ORDER BY height desc
+-- (2)조회된컬럼순서로 정렬하기. height가 2번째 조회된 컬럼이므로 2
+SELECT NAME,height FROM student 
+WHERE grade = 1 
+ORDER BY 2 desc
+-- (3)별명으로 정렬하기
+SELECT NAME 이름 ,height 키 FROM student 
+WHERE grade = 1 
+ORDER BY 키 desc
+
+-- 학생의 이름,학년,키조회하기. 학년순, 키가 큰순으로 출력하기
+SELECT NAME,grade,height
+FROM student
+ORDER BY grade ASC ,height desc
+
+SELECT NAME,grade,height
+FROM student
+ORDER BY 2 ASC ,3 DESC
+-- 컬럼의 순서, 별명으로 정렬시는 반드시 해당 컬럼이 조회되어야 한다.
+-- 컬럼명으로 정렬시는 조회된 컬럼이 아니어도 가능함
+-- 1학년 학생의 이름 조회하기. 키가 큰순으로 출력하기
+SELECT NAME FROM student WHERE grade =1 ORDER BY height desc
+--오류 발생. 키는 조회된 컬럼이 아님
+SELECT NAME FROM student WHERE grade =1 ORDER BY 2 DESC 
+/*
+  문제 : 
+  1. 교수테이블(professor)에서 
+     교수번호, 교수이름, 학과코드(deptno), 급여, 예상급여(10%인상) 출력하기.
+	  단 학과코드 순으로 예상 급여의 역순으로 조회하기
+  2. 학생테이블에서 지도교수(profno)가 배정되지 않은 학생의 
+     학번, 이름, 지도교수번호, 전공1코드 출력하기 
+  	  단 학과코드 순으로 정렬하기	 
+  3. 1학년 학생의 이름, 키, 몸무게 출력하기 
+     단 키는 작은순으로 몸무게는 큰순으로 출력하기	 
+*/
+-- 1
+SELECT NO, NAME,deptno,salary,salary * 1.1 FROM professor
+ORDER BY deptno, salary * 1.1 desc
+SELECT NO, NAME,deptno,salary,salary * 1.1 FROM professor
+ORDER BY 3, 5 DESC
+-- 2
+SELECT studno,NAME,profno,major1 FROM student
+WHERE profno IS NULL ORDER BY major1
+SELECT studno,NAME,profno,major1 FROM student
+WHERE profno IS NULL ORDER BY 4
+-- 3
+SELECT NAME,height,weight FROM student
+WHERE grade = 1
+ORDER BY height , weight DESC
+
+SELECT NAME,height,weight FROM student
+WHERE grade = 1
+ORDER BY 2 , 3 DESC
