@@ -438,6 +438,9 @@ SELECT date_format(str_to_date('2025년12월25일','%Y년%m월%d일'),'%Y년%m�
 -- 교수의 이름,직책,입사일,정식입사일 출력하기
 -- 정식입사일 : 입사일의 3개월 후
 -- 입사일,정식입사일을 yyyy년mm월dd일의 형식으로 출력하기
-
+SELECT NAME,POSITION,
+       date_format(hiredate,'%Y년%m월%d일') 입사일,
+date_format(DATE_ADD(hiredate,INTERVAL 3 MONTH),'%Y년%m월%d일') 정식입사일 
+FROM professor
 
 
