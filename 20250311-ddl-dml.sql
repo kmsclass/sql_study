@@ -362,3 +362,52 @@ SELECT * FROM v_stu2
                반드시 별명을 설정해야 함
 */
 -- 학생의 학번,이름,학년,키,몸무게, 학년의 평균키,평균몸무게 조회하기
+SELECT studno,NAME,grade,height,weight,
+  (SELECT AVG(height) FROM student s2 WHERE s1.grade = s2.grade) 평균키,
+  (SELECT AVG(weight) FROM student s2 WHERE s1.grade = s2.grade) 평균몸무게
+FROM student s1    
+-- inline 뷰를 이용하기
+SELECT studno,NAME,s.grade,height,weight,avg_h 평균키 ,avg_w 평균몸무게
+FROM student s, 
+(SELECT grade, AVG(height) avg_h ,AVG(weight) avg_w 
+ FROM student GROUP BY grade) a
+WHERE s.grade = a.grade 
+
+-- 사원테이블에서 사원번호,사원명,직급,부서코드,부서명, 부서별평균급여,
+-- 부서별 평균보너스 출력하기. 보너스가 없으면 0으로 처리한다
+SELECT e.empno, e.ename,e.job,e.deptno,d.dname, a.avg_s, a.avg_b
+FROM emp e, dept d,
+  (SELECT deptno, AVG(salary) avg_s, AVG(ifnull(bonus,0)) avg_b 
+   FROM emp GROUP by deptno) a
+WHERE e.deptno = d.deptno
+  AND e.deptno = a.deptno   
+   
+/*
+    사용자 관리
+*/   
+-- 데이터베이스 생성
+CREATE DATABASE mariadb 
+-- 데이터베이스 목록 조회
+SHOW DATABASES
+-- 테이블 목록 조회
+SHOW TABLES
+
+-- 사용자 생성하기
+USE mariadb
+CREATE USER test1
+-- 비밀번호 설정하기
+SET PASSWORD FOR 'test1'=PASSWORD("pass1")
+
+-- 권한 주기
+grant select,insert,update,delete,create,drop,create VIEW 
+on mariadb.* to 'test1'@'%'
+
+GRANT ALTER ON mariadb.* TO 'test1'@'%';
+-- 권한 조회
+SELECT * FROM USER_PRIVILEGES WHERE grantee LIKE '%test1%'
+
+-- 권한 회수 : revoke
+REVOKE all PRIVILEGES ON mariadb.* FROM test1@'%'
+
+-- test1 사용자 삭제하기
+DROP USER 'test1'@'%';
