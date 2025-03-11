@@ -398,3 +398,5 @@ USE information_schema -- information_schema database 선택
                        -- information_schema의 테이블/뷰를 사용하기 
 SELECT * FROM table_constraints
 WHERE TABLE_NAME='professor_101'
+USE gdjdb
+SELECT * FROM student
