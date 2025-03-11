@@ -110,7 +110,7 @@ FROM professor p
 CREATE TABLE test6(
   seq INT PRIMARY KEY AUTO_INCREMENT,
   NAME VARCHAR(20),
-  birthday date
+  birthday DATE
 )
 DESC test6
 
